@@ -1,0 +1,79 @@
+[build-system]
+build-backend = "uv_build"
+requires = [ "uv-build>=0.10.9,<0.11" ]
+
+[project]
+name = "flask-hospital"
+version = "0.0.1"
+description = "Flask practice in Python simulating a hospital"
+readme = "README.md"
+keywords = [ "python" ]
+authors = [ { name = "andreslopezlu", email = "andreslopezlu@gmail.com" } ]
+requires-python = ">=3.12"
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+urls.Documentation = "https://andreslopezlu.github.io/flask-hospital/"
+urls.Repository = "https://github.com/andreslopezlu/flask-hospital"
+
+[dependency-groups]
+dev = [
+  "mypy",
+  "pre-commit",
+  "pytest",
+  "pytest-cov>=7.1",
+  "requests>=2.32.5",
+  "ruff",
+]
+
+# MANTENER COMO STANDALONE: No usar 'workspace = true'.
+# Este es un proyecto único; activar workspace evitaría que uv instale
+# el paquete localmente en el venv, rompiendo los imports del src layout.
+# CONFIGURACIÓN DE PROYECTO ÚNICO:
+# Se omite 'workspace' para forzar la instalación editable del paquete
+# 'flask_hospital'. Solo usar 'workspace' si este repo se convierte
+# en un monorepo con múltiples paquetes y un uv.lock compartido.
+# MODO STANDALONE: Evitar workspace=true para permitir el autodescubrimiento de 'src/'.
+# [tool.uv]
+# sources.flask_hospital = { workspace = true }
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+fix = false
+format.preview = true
+format.quote-style = "double"
+lint.select = [ "ALL" ]
+lint.ignore = [
+  "ANN",    # Let Mypy handle type annotations
+  "COM812", # Conflict with formatter
+  "D",      # Ignore missing docstrings
+  "EM101",  # Allow raw strings in exception messages
+  "FIX002", # Allow TODOs
+  "ISC001", # Conflict with formatter
+  "TD002",  # Don't require TODO authors
+  "TD003",  # Don't require links to issues in TODOs
+  "TRY003", # Allow long messages in exceptions (Tryceratops)
+]
+lint.per-file-ignores."tests/*" = [ "PLR2004", "S101" ]
+
+[tool.pytest]
+ini_options.testpaths = [ "tests" ]
+ini_options.pythonpath = [ "." ]
+
+[tool.mypy]
+python_version = "3.12"
+files = [ "src", "tests" ]
+mypy_path = "src"
+explicit_package_bases = true
+strict = true
+warn_return_any = true
+show_error_codes = true
+
+[tool.build]
+packages = [ "src/flask_hospital" ]
