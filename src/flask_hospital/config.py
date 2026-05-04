@@ -13,11 +13,11 @@ class BasicConfig:
 
 
 class DevelopmentConfig(BasicConfig):
-    DB_USER: str | None = os.environ.get("DB_USER")
-    DB_PASSWORD: str | None = os.environ.get("DB_PASSWORD")
-    DB_PORT: int = 3306
-    DB_NAME: str = "flask_hospital_db"
-    MYSQL_DATABASE_URI: str = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost:{DB_PORT}/{DB_NAME}"
+    MYSQL_HOST: str | None = os.environ.get("MYSQL_HOST")
+    MYSQL_USER: str | None = os.environ.get("MYSQL_USER")
+    MYSQL_PASSWORD: str | None = os.environ.get("MYSQL_PASSWORD")
+    MYSQL_DATABASE: str | None = os.environ.get("MYSQL_DATABASE")
+    MYSQL_PORT: int | None = int(os.environ.get("MYSQL_PORT", "3306"))
 
 
 # --- INICIO DEL HACKEO INFALIBLE ---

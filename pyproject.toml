@@ -33,6 +33,7 @@ dependencies = [
 dev = [
   "flask-sqlalchemy>=3.1.1",
   "mypy",
+  "mysql-connector-python>=9.7.0",
   "pre-commit",
   "pymysql>=1.1.2",
   "pytest",
