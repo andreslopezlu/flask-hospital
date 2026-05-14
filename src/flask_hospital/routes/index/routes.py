@@ -5,4 +5,4 @@ index_bp = Blueprint("index", __name__)
 
 @index_bp.route("/")
 def home() -> str:
-    return "Hola inmundo animal"
+    return "Hola inmundo animal y feliz año nuevo! ujaja"

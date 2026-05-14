@@ -232,7 +232,7 @@ mod module *args:
 # Limpieza total de archivos temporales y cachés
 # Uso: $ just clean
 clean:
-    rm -rf .pytest_cache .mypy_cache .ruff_cache .venv dist
+    rm -rf .pytest_cache .mypy_cache .ruff_cache .venv dist uv.lock
     find . -type d -name "__pycache__" -exec rm -rf {} +
     find . -type f -name "*.pyc" -delete
     @echo "✨ Proyecto limpio."
