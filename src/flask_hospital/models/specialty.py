@@ -21,7 +21,7 @@ class Specialty(db.Model):
     def __repr__(self) -> str:
         return (
             f"Specialty (id={self.id}, name={self.name}, abbreviation={self.abbreviation}, "
-            f"description={self.description}, state={self.state})"
+            f"description={self.description}, is_active={self.is_active})"
         )
 
     def to_dict(self) -> dict[str, str | int | None]:
@@ -30,7 +30,7 @@ class Specialty(db.Model):
             "name": self.name,
             "abbreviation": self.abbreviation,
             "description": self.description,
-            "state": self.state,
+            "is_active": self.is_active,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
