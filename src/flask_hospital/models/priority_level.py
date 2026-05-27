@@ -1,8 +1,11 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flask_hospital.extensions import db
+
+if TYPE_CHECKING:
+    from flask_hospital.models.triage import Triage
 
 
 class PriorityLevel(db.Model):
@@ -15,6 +18,8 @@ class PriorityLevel(db.Model):
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
     )
+
+    triages: Mapped[list["Triage"]] = relationship("Triage", back_populates="priority_level", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"PriorityLevel(name={self.name}, abbreviation={self.abbreviation})"

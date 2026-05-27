@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -7,6 +7,9 @@ from flask_hospital.extensions import db
 from flask_hospital.models.blood_type import BloodType
 from flask_hospital.models.gender import Gender
 from flask_hospital.models.identification import Identification
+
+if TYPE_CHECKING:
+    from flask_hospital.models.triage import Triage
 
 
 class Nurse(db.Model):
@@ -35,6 +38,7 @@ class Nurse(db.Model):
     identification: Mapped["Identification"] = relationship("Identification", back_populates="nurses", lazy="joined")
     gender: Mapped["Gender"] = relationship("Gender", back_populates="nurses", lazy="joined")
     blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="nurses", lazy="joined")
+    triages: Mapped[list["Triage"]] = relationship("Triage", back_populates="nurse", lazy="selectin")
 
     def __repr__(self) -> str:
         return (

@@ -10,6 +10,8 @@ from flask_hospital.models.identification import Identification
 
 if TYPE_CHECKING:
     from flask_hospital.models.atention import Atention
+    from flask_hospital.models.history import History
+    from flask_hospital.models.triage import Triage
 
 
 class Patient(db.Model):
@@ -37,6 +39,12 @@ class Patient(db.Model):
     blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="doctors", lazy="joined")
     atentions: Mapped[list["Atention"]] = relationship(
         "Atention", back_populates="patient", lazy="selectin", cascade="all, delete-orphan"
+    )
+    history: Mapped["History"] = relationship(
+        "History", back_populates="patient", lazy="joined", uselist=False, cascade="all, delete-orphan"
+    )
+    triages: Mapped["Triage"] = relationship(
+        "Triage", back_populates="patient", lazy="selectin", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
