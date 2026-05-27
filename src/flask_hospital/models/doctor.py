@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -7,6 +7,9 @@ from flask_hospital.extensions import db
 from flask_hospital.models.blood_type import BloodType
 from flask_hospital.models.gender import Gender
 from flask_hospital.models.identification import Identification
+
+if TYPE_CHECKING:
+    from flask_hospital.models.atention import Atention
 
 
 class Doctor(db.Model):
@@ -16,10 +19,10 @@ class Doctor(db.Model):
     name: Mapped[str] = mapped_column(db.String(100), nullable=False)
     lastname: Mapped[str] = mapped_column(db.String(100), nullable=False)
     identification_number: Mapped[int] = mapped_column(db.Integer, nullable=False, unique=True)
-    identification_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("identification.id"), nullable=False)
+    identification_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("identification.id"), nullable=True)
     birth_date: Mapped[datetime] = mapped_column(db.DateTime, nullable=False)
-    gender_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("gender.id"), nullable=False)
-    blood_type_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("blood_type.id"), nullable=False)
+    gender_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("gender.id"), nullable=True)
+    blood_type_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("blood_type.id"), nullable=True)
     medical_license_number: Mapped[int] = mapped_column(db.Integer, nullable=False, unique=True)
     email: Mapped[str] = mapped_column(db.String(100), nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(db.String(50), nullable=False, unique=True)
@@ -35,6 +38,7 @@ class Doctor(db.Model):
     identification: Mapped["Identification"] = relationship("Identification", back_populates="doctors", lazy="joined")
     gender: Mapped["Gender"] = relationship("Gender", back_populates="doctors", lazy="joined")
     blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="doctors", lazy="joined")
+    atentions: Mapped[list["Atention"]] = relationship("Atention", back_populates="doctor", lazy="selectin")
 
     def __repr__(self) -> str:
         return (
