@@ -13,20 +13,23 @@ class User(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     email: Mapped[str] = mapped_column(db.String(200), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(db.String(200), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(db.String(200), nullable=False)
+    password_hash: Mapped[str] = mapped_column("password", db.String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
     updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
-
     role_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("role.id"), nullable=True)
-
     role: Mapped["Role"] = relationship("Role", back_populates="users", lazy="joined")
 
-    def set_password(self, password: str) -> None:
-        self.password = generate_password_hash(password)
+    @property
+    def password(self) -> None:
+        raise AttributeError("Password is not a readable attribute")
+
+    @password.setter
+    def password(self, password: str) -> None:
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password: str) -> bool:
-        return check_password_hash(self.password, password)
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self) -> str:
         role_name: str | None = self.role.name if self.role else None
