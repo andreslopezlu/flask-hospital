@@ -1,8 +1,12 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flask_hospital.extensions import db
+
+if TYPE_CHECKING:
+    from flask_hospital.models.doctor_specialty import DoctorSpecialty
 
 
 class Specialty(db.Model):
@@ -16,6 +20,10 @@ class Specialty(db.Model):
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
+
+    doctor_specialties: Mapped[list["DoctorSpecialty"]] = relationship(
+        "DoctorSpecialty", back_populates="specialty", lazy="selectin", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

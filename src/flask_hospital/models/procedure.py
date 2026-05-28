@@ -1,9 +1,12 @@
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flask_hospital.extensions import db
+
+if TYPE_CHECKING:
+    from flask_hospital.models.procedure_atention import ProcedureAtention
 
 
 class Procedure(db.Model):
@@ -16,6 +19,9 @@ class Procedure(db.Model):
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
+    procedure_atentions: Mapped[list["ProcedureAtention"]] = relationship(
+        "ProcedureAtention", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

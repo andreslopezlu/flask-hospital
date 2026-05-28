@@ -1,8 +1,12 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flask_hospital.extensions import db
+
+if TYPE_CHECKING:
+    from flask_hospital.models.turn import Turn
 
 
 class TurnState(db.Model):
@@ -15,6 +19,8 @@ class TurnState(db.Model):
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
     )
+
+    turns: Mapped[list["Turn"]] = relationship("Turn", back_populates="turn_state", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"TurnState(name={self.name}, abbreviation={self.abbreviation})"

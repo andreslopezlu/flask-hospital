@@ -10,6 +10,9 @@ from flask_hospital.models.identification import Identification
 
 if TYPE_CHECKING:
     from flask_hospital.models.atention import Atention
+    from flask_hospital.models.doctor_specialty import DoctorSpecialty
+    from flask_hospital.models.procedure_atention import ProcedureAtention
+    from flask_hospital.models.user import User
 
 
 class Doctor(db.Model):
@@ -32,6 +35,7 @@ class Doctor(db.Model):
     day_hour_price: Mapped[float] = mapped_column(db.Float, nullable=False)
     night_hour_price: Mapped[float] = mapped_column(db.Float, nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
+    user_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("user.id"), nullable=True, unique=True)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
     updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
@@ -39,6 +43,13 @@ class Doctor(db.Model):
     gender: Mapped["Gender"] = relationship("Gender", back_populates="doctors", lazy="joined")
     blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="doctors", lazy="joined")
     atentions: Mapped[list["Atention"]] = relationship("Atention", back_populates="doctor", lazy="selectin")
+    doctor_specialties: Mapped[list["DoctorSpecialty"]] = relationship(
+        "DoctorSpecialty", back_populates="doctor", lazy="selectin", cascade="all, delete-orphan"
+    )
+    user: Mapped["User"] = relationship("User", lazy="joined", uselist=False)
+    procedure_atentions: Mapped[list["ProcedureAtention"]] = relationship(
+        "ProcedureAtention", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return (
