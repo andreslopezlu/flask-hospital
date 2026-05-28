@@ -9,6 +9,7 @@ from flask_hospital.models.gender import Gender
 from flask_hospital.models.identification import Identification
 
 if TYPE_CHECKING:
+    from flask_hospital.models.admission import Admission
     from flask_hospital.models.atention import Atention
     from flask_hospital.models.history import History
     from flask_hospital.models.triage import Triage
@@ -34,9 +35,9 @@ class Patient(db.Model):
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
     updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
-    identification: Mapped["Identification"] = relationship("Identification", back_populates="doctors", lazy="joined")
-    gender: Mapped["Gender"] = relationship("Gender", back_populates="doctors", lazy="joined")
-    blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="doctors", lazy="joined")
+    identification: Mapped["Identification"] = relationship("Identification", back_populates="patients", lazy="joined")
+    gender: Mapped["Gender"] = relationship("Gender", back_populates="patients", lazy="joined")
+    blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="patients", lazy="joined")
     atentions: Mapped[list["Atention"]] = relationship(
         "Atention", back_populates="patient", lazy="selectin", cascade="all, delete-orphan"
     )
@@ -45,6 +46,9 @@ class Patient(db.Model):
     )
     triages: Mapped["Triage"] = relationship(
         "Triage", back_populates="patient", lazy="selectin", cascade="all, delete-orphan"
+    )
+    admissions: Mapped[list["Admission"]] = relationship(
+        "Admission", back_populates="patient", lazy="selectin", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

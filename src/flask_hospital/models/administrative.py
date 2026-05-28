@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -7,6 +7,10 @@ from flask_hospital.extensions import db
 from flask_hospital.models.blood_type import BloodType
 from flask_hospital.models.gender import Gender
 from flask_hospital.models.identification import Identification
+
+if TYPE_CHECKING:
+    from flask_hospital.models.admission import Admission
+    from flask_hospital.models.user import User
 
 
 class Administrative(db.Model):
@@ -29,6 +33,7 @@ class Administrative(db.Model):
     day_hour_price: Mapped[float] = mapped_column(db.Float, nullable=False)
     night_hour_price: Mapped[float] = mapped_column(db.Float, nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
+    user_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("user.id"), nullable=True, unique=True)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
     updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
@@ -37,6 +42,8 @@ class Administrative(db.Model):
     )
     gender: Mapped["Gender"] = relationship("Gender", back_populates="administratives", lazy="joined")
     blood_type: Mapped["BloodType"] = relationship("BloodType", back_populates="administratives", lazy="joined")
+    admissions: Mapped[list["Admission"]] = relationship("Admission", back_populates="administrative", lazy="selectin")
+    user: Mapped["User"] = relationship("User", lazy="joined", uselist=False)
 
     def __repr__(self) -> str:
         return (
