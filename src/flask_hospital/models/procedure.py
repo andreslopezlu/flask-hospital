@@ -20,6 +20,7 @@ class Procedure(db.Model):
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
     )
+
     procedure_atentions: Mapped[list["ProcedureAtention"]] = relationship(
         "ProcedureAtention", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
     )

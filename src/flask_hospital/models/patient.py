@@ -61,7 +61,7 @@ class Patient(db.Model):
             f"notification_preference='{self.notification_preference or None}')"
         )
 
-    def to_dict(self) -> dict[str, str | int | float | bool | datetime | Identification | Gender | BloodType | None]:
+    def to_dict(self) -> dict[str, str | int | bool | datetime | Identification | Gender | BloodType | None]:
         return {
             "id": self.id,
             "name": self.name,
