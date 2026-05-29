@@ -7,6 +7,7 @@ from flask_hospital.extensions import db
 
 if TYPE_CHECKING:
     from flask_hospital.models.bill import Bill
+    from flask_hospital.models.dispensing import Dispensing
     from flask_hospital.models.doctor import Doctor
     from flask_hospital.models.history import History
     from flask_hospital.models.patient import Patient
@@ -46,6 +47,7 @@ class Atention(db.Model):
     procedure_atentions: Mapped[list["ProcedureAtention"]] = relationship(
         "ProcedureAtention", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
     )
+    dispensations: Mapped[list["Dispensing"]] = relationship("Dispensing", back_populates="atention", lazy="selectin")
 
     def __repr__(self) -> str:
         return (

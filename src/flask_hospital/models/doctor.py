@@ -48,7 +48,7 @@ class Doctor(db.Model):
     )
     user: Mapped["User"] = relationship("User", lazy="joined", uselist=False)
     procedure_atentions: Mapped[list["ProcedureAtention"]] = relationship(
-        "ProcedureAtention", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
+        "ProcedureAtention", back_populates="atention", lazy="selectin"
     )
 
     def __repr__(self) -> str:
