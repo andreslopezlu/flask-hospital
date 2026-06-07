@@ -15,20 +15,28 @@ if TYPE_CHECKING:
 class Bill(db.Model):
     __tablename__: str = "bill"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
-    atention_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("atention.id"), nullable=False, unique=True)
-    administrative_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("administrative.id"), nullable=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
+    atention_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("atention.id"), nullable=False, unique=True
+    )
+    administrative_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("administrative.id"), nullable=True
+    )
     billing_date_time: Mapped[datetime] = mapped_column(db.Datetime, default=db.func.now(), nullable=False)
-    subtotal: Mapped[float] = mapped_column(db.Float, nullable=False)
-    tax: Mapped[float] = mapped_column(db.Float, nullable=False)
-    discount: Mapped[float] = mapped_column(db.Float, nullable=False)
-    total: Mapped[float] = mapped_column(db.Float, nullable=False)
-    payment_method_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("payment_method.id"), nullable=True)
-    bill_state_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("bill_state.id"), nullable=True)
+    subtotal: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    tax: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    discount: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    total: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    payment_method_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("payment_method.id"), nullable=True
+    )
+    bill_state_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("bill_state.id"), nullable=True)
     bill_metadata: Mapped[Any] = mapped_column(db.JSON, nullable=False)
     observations: Mapped[Any] = mapped_column(db.JSON, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
-    updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
 
     atention: Mapped["Atention"] = relationship("Atention", back_populates="bill", lazy="joined", uselist=False)
     administrative: Mapped["Administrative"] = relationship("Administrative", back_populates="bills", lazy="joined")

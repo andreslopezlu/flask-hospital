@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class Gender(db.Model):
     __tablename__: str = "gender"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     abbreviation: Mapped[str] = mapped_column(db.String(50), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
@@ -23,12 +23,12 @@ class Gender(db.Model):
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
     )
 
-    doctors: Mapped[list["Doctor"]] = relationship("Doctor", back_populates="blood_type", lazy="selectin")
-    nurses: Mapped[list["Nurse"]] = relationship("Nurse", back_populates="blood_type", lazy="selectin")
+    doctors: Mapped[list["Doctor"]] = relationship("Doctor", back_populates="gender", lazy="selectin")
+    nurses: Mapped[list["Nurse"]] = relationship("Nurse", back_populates="gender", lazy="selectin")
     administratives: Mapped[list["Administrative"]] = relationship(
-        "Administrative", back_populates="blood_type", lazy="selectin"
+        "Administrative", back_populates="gender", lazy="selectin"
     )
-    patients: Mapped[list["Patient"]] = relationship("Patient", back_populates="blood_type", lazy="selectin")
+    patients: Mapped[list["Patient"]] = relationship("Patient", back_populates="gender", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"Gender(name={self.name}, abbreviation={self.abbreviation})"

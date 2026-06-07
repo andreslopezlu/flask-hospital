@@ -17,26 +17,32 @@ if TYPE_CHECKING:
 class Nurse(db.Model):
     __tablename__: str = "nurse"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), nullable=False)
     lastname: Mapped[str] = mapped_column(db.String(100), nullable=False)
-    identification_number: Mapped[int] = mapped_column(db.Integer, nullable=False, unique=True)
-    identification_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("identification.id"), nullable=True)
+    identification_number: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False, unique=True)
+    identification_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("identification.id"), nullable=True
+    )
     birth_date: Mapped[datetime] = mapped_column(db.DateTime, nullable=False)
-    gender_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("gender.id"), nullable=True)
-    blood_type_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("blood_type.id"), nullable=True)
-    nurse_license_number: Mapped[int] = mapped_column(db.Integer, nullable=False, unique=True)
+    gender_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("gender.id"), nullable=True)
+    blood_type_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("blood_type.id"), nullable=True)
+    nurse_license_number: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False, unique=True)
     email: Mapped[str] = mapped_column(db.String(100), nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(db.String(50), nullable=False, unique=True)
     address: Mapped[str] = mapped_column(db.String(100), nullable=False)
     emergency_contact: Mapped[Any] = mapped_column(db.JSON, nullable=False)
-    salary: Mapped[float] = mapped_column(db.Float, nullable=False)
-    day_hour_price: Mapped[float] = mapped_column(db.Float, nullable=False)
-    night_hour_price: Mapped[float] = mapped_column(db.Float, nullable=False)
+    salary: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    day_hour_price: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    night_hour_price: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
-    user_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("user.id"), nullable=True, unique=True)
-    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
-    updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    user_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("user.id"), nullable=True, unique=True
+    )
+    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
 
     identification: Mapped["Identification"] = relationship("Identification", back_populates="nurses", lazy="joined")
     gender: Mapped["Gender"] = relationship("Gender", back_populates="nurses", lazy="joined")

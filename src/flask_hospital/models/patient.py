@@ -18,22 +18,26 @@ if TYPE_CHECKING:
 class Patient(db.Model):
     __tablename__: str = "patient"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), nullable=False)
     lastname: Mapped[str] = mapped_column(db.String(100), nullable=False)
-    identification_number: Mapped[int] = mapped_column(db.Integer, nullable=False, unique=True)
-    identification_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("identification.id"), nullable=True)
+    identification_number: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False, unique=True)
+    identification_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("identification.id"), nullable=True
+    )
     birth_date: Mapped[datetime] = mapped_column(db.DateTime, nullable=False)
-    gender_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("gender.id"), nullable=True)
-    blood_type_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("blood_type.id"), nullable=True)
+    gender_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("gender.id"), nullable=True)
+    blood_type_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("blood_type.id"), nullable=True)
     email: Mapped[str] = mapped_column(db.String(100), nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(db.String(50), nullable=False, unique=True)
     address: Mapped[str] = mapped_column(db.String(100), nullable=False)
     emergency_contact: Mapped[Any] = mapped_column(db.JSON, nullable=False)
     notification_preference: Mapped[Any] = mapped_column(db.JSON, nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
-    updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
 
     identification: Mapped["Identification"] = relationship("Identification", back_populates="patients", lazy="joined")
     gender: Mapped["Gender"] = relationship("Gender", back_populates="patients", lazy="joined")

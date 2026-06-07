@@ -10,14 +10,16 @@ from flask_hospital.models.role import Role
 class User(db.Model):
     __tablename__: str = "user"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     email: Mapped[str] = mapped_column(db.String(200), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(db.String(200), unique=True, nullable=False)
-    password_hash: Mapped[str] = mapped_column("password", db.String(200), nullable=False)
+    password_hash: Mapped[str] = mapped_column("password", db.String(200), unique=True, nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now())
-    updated_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
-    role_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("role.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
+    role_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("role.id"), nullable=True)
     role: Mapped["Role"] = relationship("Role", back_populates="users", lazy="joined")
 
     @property

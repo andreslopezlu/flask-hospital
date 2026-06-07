@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 class DoctorSpecialty(db.Model):
     __tablename__: str = "doctor_specialty"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
-    doctor_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("doctor.id"), nullable=False)
-    specialty_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("specialty.id"), nullable=False)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
+    doctor_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("doctor.id"), nullable=False)
+    specialty_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("specialty.id"), nullable=False)
     vinculation_date: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(

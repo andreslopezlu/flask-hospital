@@ -14,13 +14,17 @@ if TYPE_CHECKING:
 class Admission(db.Model):  # type: ignore[misc]
     __tablename__: str = "admission"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     start_date_time: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     end_date_time: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     reason: Mapped[Any] = mapped_column(db.JSON, nullable=False)
-    administrative_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("administrative.id"), nullable=True)
-    turn_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("turn.id"), nullable=True, unique=True)
-    patient_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("patient.id"), nullable=False)
+    administrative_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("administrative.id"), nullable=True
+    )
+    turn_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("turn.id"), nullable=True, unique=True
+    )
+    patient_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("patient.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False

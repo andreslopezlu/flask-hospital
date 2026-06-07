@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class Role(db.Model):
     __tablename__: str = "role"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     abbreviation: Mapped[str] = mapped_column(db.String(50), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(db.String(200), unique=True, nullable=False)
