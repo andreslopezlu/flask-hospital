@@ -13,13 +13,13 @@ if TYPE_CHECKING:
 class Dispensing(db.Model):
     __tablename__: str = "dispensing"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
-    atention_id: Mapped[int] = mapped_column(db.Integer, nullable=False)
-    medicine_id: Mapped[int] = mapped_column(db.Integer, nullable=False)
-    quantity_supplied: Mapped[float] = mapped_column(db.Float, nullable=False)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
+    atention_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False)
+    medicine_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False)
+    quantity_supplied: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
     delivery_date_time: Mapped[datetime] = mapped_column(db.DateTime, defaul=db.func.now(), nullable=False)
-    cost: Mapped[float] = mapped_column(db.Float, nullable=False)
-    observation: Mapped[str] = mapped_column(db.String(255))
+    cost: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    observation: Mapped[str] = mapped_column(db.JSON, nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False

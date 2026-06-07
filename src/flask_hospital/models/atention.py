@@ -18,11 +18,13 @@ if TYPE_CHECKING:
 class Atention(db.Model):
     __tablename__: str = "atention"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
-    patient_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("patient.id"), nullable=False)
-    history_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("history.id"), nullable=False)
-    triage_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("triage.id"), nullable=False, unique=True)
-    doctor_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("doctor.id"), nullable=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
+    patient_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("patient.id"), nullable=False)
+    history_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("history.id"), nullable=False)
+    triage_id: Mapped[int] = mapped_column(
+        db.Integer(unsigned=True), db.ForeignKey("triage.id"), nullable=False, unique=True
+    )
+    doctor_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("doctor.id"), nullable=True)
     start_date_time: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     end_date_time: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     consultation_reason: Mapped[Any] = mapped_column(db.JSON, nullable=False)
@@ -47,7 +49,9 @@ class Atention(db.Model):
     procedure_atentions: Mapped[list["ProcedureAtention"]] = relationship(
         "ProcedureAtention", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
     )
-    dispensations: Mapped[list["Dispensing"]] = relationship("Dispensing", back_populates="atention", lazy="selectin")
+    dispensations: Mapped[list["Dispensing"]] = relationship(
+        "Dispensing", back_populates="atention", lazy="selectin", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return (

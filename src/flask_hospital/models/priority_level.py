@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class PriorityLevel(db.Model):
     __tablename__: str = "priority_level"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     abbreviation: Mapped[str] = mapped_column(db.String(50), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)

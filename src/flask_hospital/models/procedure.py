@@ -12,10 +12,11 @@ if TYPE_CHECKING:
 class Procedure(db.Model):
     __tablename__: str = "procedure"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     abbreviation: Mapped[str] = mapped_column(db.String(50), unique=True, nullable=False)
     historical_cost: Mapped[Any] = mapped_column(db.JSON, nullable=True)
+    is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False

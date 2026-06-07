@@ -15,14 +15,14 @@ if TYPE_CHECKING:
 class ProcedureAtention(db.Model):
     __tablename__: str = "procedure_atention"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
-    atention_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("atention.id"), nullable=False)
-    procedure_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("procedure.id"), nullable=False)
-    quantity: Mapped[int] = mapped_column(db.Integer, nullable=False)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
+    atention_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("atention.id"), nullable=False)
+    procedure_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("procedure.id"), nullable=False)
+    quantity: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False)
     observation: Mapped[Any] = mapped_column(db.JSON, nullable=False)
-    cost: Mapped[float] = mapped_column(db.Float, nullable=False)
-    doctor_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("doctor.id"), nullable=True)
-    nurse_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("nurse.id"), nullable=True)
+    cost: Mapped[float] = mapped_column(db.Float(unsigned=True), nullable=False)
+    doctor_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("doctor.id"), nullable=True)
+    nurse_id: Mapped[int] = mapped_column(db.Integer(unsigned=True), db.ForeignKey("nurse.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False

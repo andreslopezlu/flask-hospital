@@ -7,27 +7,34 @@ from flask_hospital.extensions import db
 
 if TYPE_CHECKING:
     from flask_hospital.models.dispensing import Dispensing
+    from flask_hospital.models.medicine_presentation import MedicinePresentation
 
 
 class Medicine(db.Model):
     __tablename__: str = "medicine"
 
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer(unsigned=True), primary_key=True)
     name: Mapped[str] = mapped_column(db.String(500), nullable=False, unique=True)
     abbreviation: Mapped[str] = mapped_column(db.String(500), nullable=False, unique=True)
     concentration: Mapped[str] = mapped_column(db.String(500), nullable=False, unique=True)
     batch_number: Mapped[str] = mapped_column(db.String(100), nullable=False, unique=True)
-    expiration_date: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
-    existing_quantity: Mapped[int] = mapped_column(db.Integer, nullable=False)
-    historical_cost: Mapped[Any] = mapped_column(db.JSON, nullable=True)
-    technical_sheet: Mapped[Any] = mapped_column(db.JSON, nullable=True)
+    expiration_date: Mapped[datetime] = mapped_column(db.DateTime, nullable=False)
+    existing_quantity: Mapped[int] = mapped_column(db.Integer(unsigned=True), nullable=False)
+    historical_cost: Mapped[Any] = mapped_column(db.JSON, nullable=False)
+    technical_sheet: Mapped[Any] = mapped_column(db.JSON, nullable=False)
     is_active: Mapped[bool] = mapped_column(db.Boolean, default=1, nullable=False)
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now(), nullable=False
     )
 
-    dispensations: Mapped[list["Dispensing"]] = relationship("Dispensing", back_populates="medicine", lazy="selectin")
+    medicine_presentations: Mapped[list["MedicinePresentation"]] = relationship(
+        "MedicinePresentation", back_populates="medicine", lazy="selectin", cascade="all, delete-orphan"
+    )
+
+    dispensations: Mapped[list["Dispensing"]] = relationship(
+        "Dispensing", back_populates="medicine", lazy="selectin", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return (
