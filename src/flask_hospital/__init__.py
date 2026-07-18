@@ -15,7 +15,7 @@ def create_app(config_class: type[config.DevelopmentConfig] = config.Development
     with app.app_context():
         from flask_hospital import models  # noqa: F401, PLC0415
 
-        db.create_all()
+        # db.create_all()
 
     app.register_blueprint(index_bp)
 
