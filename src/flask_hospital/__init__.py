@@ -1,11 +1,29 @@
+import os
+from typing import Any
+
 from flask import Flask
 
 from flask_hospital import config
 from flask_hospital.extensions import db
 from flask_hospital.routes.index.routes import index_bp
 
+configuration: type[config.BasicConfig | config.DevConfig | config.TestConfig | config.ProdConfig] | None = None
+ENVIRONMENT_TYPE: str | None = os.getenv("ENV")
 
-def create_app(config_class: type[config.DevelopmentConfig] = config.DevelopmentConfig) -> Flask:
+if ENVIRONMENT_TYPE == "BASIC":
+    configuration = config.BasicConfig
+elif ENVIRONMENT_TYPE == "DEV":
+    configuration = config.DevConfig
+elif ENVIRONMENT_TYPE == "TEST":
+    configuration = config.TestConfig
+elif ENVIRONMENT_TYPE == "PROD":
+    configuration = config.ProdConfig
+
+
+def create_app(
+    config_class: type[config.BasicConfig | config.DevConfig | config.TestConfig | config.ProdConfig]
+    | None = configuration,
+) -> Flask:
     app: Flask = Flask(__name__)
 
     app.config.from_object(config_class)
